@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { BarChart } from "../barChart";
+import { BarChart } from "../charts";
 
 export const App: React.FC = () => {
   return (
