@@ -8,9 +8,16 @@ export interface IBar {
   readonly yCoordinate: number;
   readonly color: string;
   readonly maxYValue: number;
+  readonly yAxisUnit: number;
 }
 
-export const Bar: React.FC<IBar> = ({ id, yCoordinate, color, maxYValue }) => {
+export const Bar: React.FC<IBar> = ({
+  id,
+  yCoordinate,
+  color,
+  maxYValue,
+  yAxisUnit
+}) => {
   const barRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   return (
     <StyledBar ref={barRef} yCoordinate={yCoordinate} color={color}>
@@ -18,6 +25,7 @@ export const Bar: React.FC<IBar> = ({ id, yCoordinate, color, maxYValue }) => {
         barId={id}
         barRef={barRef}
         maxYValue={maxYValue}
+        yAxisUnit={yAxisUnit}
       ></VerticalResizeButton>
     </StyledBar>
   );

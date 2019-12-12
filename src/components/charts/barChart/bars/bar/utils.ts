@@ -55,13 +55,15 @@ export const calculateBarYValue: CalculateBarYValue = (
 
 type CalculateBarTrackerLineYValue = (
   barYValue: number,
-  maxYValue: number
+  maxYValue: number,
+  yAxisUnit: number
 ) => number;
 const calculateBarTrackerLineYValue: CalculateBarTrackerLineYValue = (
   barHeight,
-  maxYValue
+  maxYValue,
+  yAxisUnit
 ) => {
-  return maxYValue * 20 - barHeight;
+  return maxYValue * yAxisUnit - barHeight;
 };
 
 interface ISetBarYValueParams {
@@ -71,6 +73,7 @@ interface ISetBarYValueParams {
   readonly newMouseYCoordinate: number;
   readonly barElement: HTMLElement;
   readonly barTrackerLineElement: HTMLElement;
+  readonly yAxisUnit: number;
 }
 type ISetBarYValue = (params: ISetBarYValueParams) => void;
 export const setBarYValue: ISetBarYValue = ({
@@ -79,9 +82,10 @@ export const setBarYValue: ISetBarYValue = ({
   previousMouseYCoordinate,
   newMouseYCoordinate,
   barElement,
-  barTrackerLineElement
+  barTrackerLineElement,
+  yAxisUnit
 }) => {
-  const makeBarHeight = calculateBarYValue(maxYValue, 20);
+  const makeBarHeight = calculateBarYValue(maxYValue, yAxisUnit);
   const barHeight = makeBarHeight(
     originalBarHeight,
     previousMouseYCoordinate,
@@ -89,7 +93,8 @@ export const setBarYValue: ISetBarYValue = ({
   );
   barTrackerLineElement.style.top = `${calculateBarTrackerLineYValue(
     barHeight,
-    maxYValue
+    maxYValue,
+    yAxisUnit
   )}px`;
   barTrackerLineElement.style.display = "inline-block";
   barElement.style.border = `${barHeight <= 0 ? "none" : "1px solid #000"}`;

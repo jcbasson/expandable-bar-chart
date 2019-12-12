@@ -6,17 +6,20 @@ export interface IVerticalResizeButton {
   readonly barId: string;
   readonly barRef: React.MutableRefObject<HTMLDivElement>;
   readonly maxYValue: number;
+  readonly yAxisUnit: number;
 }
 
 export const VerticalResizeButton: React.FC<IVerticalResizeButton> = ({
   barId,
   barRef,
-  maxYValue
+  maxYValue,
+  yAxisUnit
 }) => {
   const [resizeButtonRef] = useVerticalResizeHandler({
     barId,
     barRef,
-    maxYValue
+    maxYValue,
+    yAxisUnit
   });
   return (
     <VerticalResizeButtonContainer>
