@@ -13,9 +13,10 @@ export const BarChart: React.FC = () => {
         <Bars
           maxYValue={20}
           bars={[
-            { id: "bar1", yCoordinate: 10, color: "#90EE90", maxYValue: 20 },
+            { id: "bar1", yCoordinate: 10, color: "#3798D5", maxYValue: 20 },
             { id: "bar2", yCoordinate: 5, color: "#90EE90", maxYValue: 20 },
-            { id: "bar3", yCoordinate: 15, color: "#90EE90", maxYValue: 20 }
+            { id: "bar3", yCoordinate: 15, color: "#FEE4C3", maxYValue: 20 },
+            { id: "bar4", yCoordinate: 20, color: "#f54275", maxYValue: 20 }
           ]}
         />
       </StyledBarChart>

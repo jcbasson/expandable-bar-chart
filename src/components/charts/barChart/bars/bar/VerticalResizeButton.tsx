@@ -13,14 +13,13 @@ export const VerticalResizeButton: React.FC<IVerticalResizeButton> = ({
   barRef,
   maxYValue
 }) => {
-  const [resizeButtonRef, yAxisMonitorRef] = useVerticalResizeHandler({
+  const [resizeButtonRef] = useVerticalResizeHandler({
     barId,
     barRef,
     maxYValue
   });
   return (
     <VerticalResizeButtonContainer>
-      <YAxisMonitor ref={yAxisMonitorRef}></YAxisMonitor>
       <ResizeButton ref={resizeButtonRef}></ResizeButton>
     </VerticalResizeButtonContainer>
   );
@@ -39,7 +38,7 @@ const YAxisMonitor = styled.div`
   border: 1px dashed #000;
   align-self: start;
   width: 450px;
-  left: -27%;
+  left: 20px;
   top: -1px;
   position: absolute;
   display: inline-block;

@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
 import _ from "lodash";
-import { restrictNumberToRange } from "../../../../../utils/numberUtils";
+import { calculateBarYValue } from "./utils";
 
-//TODO: Get type for "bar"
 export const useVerticalResizeHandler = ({
   barId,
   barRef,
@@ -13,41 +12,33 @@ export const useVerticalResizeHandler = ({
   maxYValue: number;
 }) => {
   const resizeButtonRef = useRef();
-  const yAxisMonitorRef = useRef();
 
   useEffect(() => {
     const resizeButtonElement = _.get(resizeButtonRef, "current");
     //@ts-ignore
     const barElement = barRef.current;
-    const yAxisMonitorElement = yAxisMonitorRef.current;
+
     let originalMouseYCoordinate = 0;
     let originalBarHeight = 0;
 
     const mouseMoveHandler = (event: MouseEvent): void => {
-      const barHeight =
-        originalBarHeight - (event.pageY - originalMouseYCoordinate);
-      const restrictedBarHeight = restrictNumberToRange(
-        0,
-        maxYValue * 20,
-        barHeight
+      const makeBarHeight = calculateBarYValue(maxYValue, 20);
+      const barHeight = makeBarHeight(
+        originalBarHeight,
+        originalMouseYCoordinate,
+        event.pageY
       );
 
-      barElement.style.border = `${
-        restrictedBarHeight <= 0 ? "none" : "1px solid #000"
-      }`;
-      barElement.style.height = `${restrictedBarHeight}px`;
+      barElement.style.border = `${barHeight <= 0 ? "none" : "1px solid #000"}`;
+      barElement.style.height = `${barHeight}px`;
     };
 
     const mouseUpHandler = (): void => {
-      //@ts-ignore
-      yAxisMonitorElement.style.display = "none";
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };
 
     const mouseDownHandler = (event: MouseEvent): void => {
-      //@ts-ignore
-      yAxisMonitorElement.style.display = "inline-block";
       originalBarHeight = parseFloat(
         getComputedStyle(barElement, null)
           .getPropertyValue("height")
@@ -77,5 +68,5 @@ export const useVerticalResizeHandler = ({
     };
   }, [resizeButtonRef.current]);
 
-  return [resizeButtonRef, yAxisMonitorRef];
+  return [resizeButtonRef];
 };

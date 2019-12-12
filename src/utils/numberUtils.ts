@@ -3,7 +3,6 @@ type RestrictNumberToRange = (
   max: number,
   valueToRestrict: number
 ) => number;
-
 export const restrictNumberToRange: RestrictNumberToRange = (
   min,
   max,
@@ -18,4 +17,12 @@ export const restrictNumberToRange: RestrictNumberToRange = (
   }
 
   return valueToRestrict;
+};
+
+type RoundNumberToNearestMultiple = (value: number, multiple: number) => number;
+export const roundNumberToNearestMultiple: RoundNumberToNearestMultiple = (
+  value,
+  multiple
+) => {
+  return Math.ceil(value / multiple) * multiple;
 };
