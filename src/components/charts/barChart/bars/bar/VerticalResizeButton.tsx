@@ -34,16 +34,6 @@ const VerticalResizeButtonContainer = styled.div`
   position: relative;
 `;
 
-const YAxisMonitor = styled.div`
-  border: 1px dashed #000;
-  align-self: start;
-  width: 450px;
-  left: 20px;
-  top: -1px;
-  position: absolute;
-  display: inline-block;
-`;
-
 const ResizeButton = styled.span`
   width: 14px;
   height: 14px;
@@ -52,4 +42,5 @@ const ResizeButton = styled.span`
   position: relative;
   top: -7px;
   cursor: ns-resize;
+  z-index: 20;
 `;

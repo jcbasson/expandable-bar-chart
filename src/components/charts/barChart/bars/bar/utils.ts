@@ -1,6 +1,5 @@
 import _ from "lodash";
 import fp from "lodash/fp";
-
 import {
   restrictNumberToRange,
   roundNumberToNearestMultiple
@@ -52,4 +51,47 @@ export const calculateBarYValue: CalculateBarYValue = (
     restrictBarYValue(0, maxYValue, yAxisUnit),
     adjustBarYValueToNearestYAxisUnit(yAxisUnit)
   );
+};
+
+type CalculateBarTrackerLineYValue = (
+  barYValue: number,
+  maxYValue: number
+) => number;
+const calculateBarTrackerLineYValue: CalculateBarTrackerLineYValue = (
+  barHeight,
+  maxYValue
+) => {
+  return maxYValue * 20 - barHeight;
+};
+
+interface ISetBarYValueParams {
+  readonly maxYValue: number;
+  readonly originalBarHeight: number;
+  readonly previousMouseYCoordinate: number;
+  readonly newMouseYCoordinate: number;
+  readonly barElement: HTMLElement;
+  readonly barTrackerLineElement: HTMLElement;
+}
+type ISetBarYValue = (params: ISetBarYValueParams) => void;
+export const setBarYValue: ISetBarYValue = ({
+  maxYValue,
+  originalBarHeight,
+  previousMouseYCoordinate,
+  newMouseYCoordinate,
+  barElement,
+  barTrackerLineElement
+}) => {
+  const makeBarHeight = calculateBarYValue(maxYValue, 20);
+  const barHeight = makeBarHeight(
+    originalBarHeight,
+    previousMouseYCoordinate,
+    newMouseYCoordinate
+  );
+  barTrackerLineElement.style.top = `${calculateBarTrackerLineYValue(
+    barHeight,
+    maxYValue
+  )}px`;
+  barTrackerLineElement.style.display = "inline-block";
+  barElement.style.border = `${barHeight <= 0 ? "none" : "1px solid #000"}`;
+  barElement.style.height = `${barHeight}px`;
 };

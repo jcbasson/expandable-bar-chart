@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { Bar, IBar } from "./bar";
@@ -14,6 +14,7 @@ export const Bars: React.FC<IBars> = ({ maxYValue, bars }) => {
       {bars.map(bar => (
         <Bar key={bar.id} {...bar} />
       ))}
+      <BarTrackerLine className="bar-tracker-line" />
     </StyledBars>
   );
 };
@@ -29,4 +30,13 @@ const StyledBars = styled.div<Pick<IBars, "maxYValue">>`
   top: 0;
   right: 0;
   float: right;
+`;
+
+const BarTrackerLine = styled.span`
+  border: 1px dashed #000;
+  align-self: start;
+  width: 450px;
+  position: absolute;
+  left: -26px;
+  display: none;
 `;

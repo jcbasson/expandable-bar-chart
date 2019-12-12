@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import _ from "lodash";
-import { calculateBarYValue } from "./utils";
+import { setBarYValue } from "./utils";
 
 export const useVerticalResizeHandler = ({
   barId,
@@ -17,23 +17,26 @@ export const useVerticalResizeHandler = ({
     const resizeButtonElement = _.get(resizeButtonRef, "current");
     //@ts-ignore
     const barElement = barRef.current;
-
-    let originalMouseYCoordinate = 0;
+    //Accessing the DOM directly because I did not want to prop drill a ref for this
+    const barTrackerLineElement = document.querySelector(
+      ".bar-tracker-line"
+    ) as HTMLElement;
+    let previousMouseYCoordinate = 0;
     let originalBarHeight = 0;
 
     const mouseMoveHandler = (event: MouseEvent): void => {
-      const makeBarHeight = calculateBarYValue(maxYValue, 20);
-      const barHeight = makeBarHeight(
+      setBarYValue({
+        maxYValue,
         originalBarHeight,
-        originalMouseYCoordinate,
-        event.pageY
-      );
-
-      barElement.style.border = `${barHeight <= 0 ? "none" : "1px solid #000"}`;
-      barElement.style.height = `${barHeight}px`;
+        previousMouseYCoordinate,
+        newMouseYCoordinate: event.pageY,
+        barElement,
+        barTrackerLineElement
+      });
     };
 
     const mouseUpHandler = (): void => {
+      barTrackerLineElement.style.display = "none";
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };
@@ -45,7 +48,7 @@ export const useVerticalResizeHandler = ({
           .replace("px", "")
       );
 
-      originalMouseYCoordinate = event.pageY;
+      previousMouseYCoordinate = event.pageY;
 
       window.addEventListener("mousemove", mouseMoveHandler);
       window.addEventListener("mouseup", mouseUpHandler);
