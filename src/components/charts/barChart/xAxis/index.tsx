@@ -13,8 +13,8 @@ export const XAxis: React.FC<IXAxis> = ({ maxYValue, yValueIncrements }) => {
     <XAxisContainer maxYValue={maxYValue}>
       {_.range(0, numberOfXAxisLines)
         .reverse()
-        .map(i => (
-          <XAxisLines yValueIncrements={yValueIncrements} />
+        .map((axisLineCount: number) => (
+          <XAxisLines key={axisLineCount} yValueIncrements={yValueIncrements} />
         ))}
     </XAxisContainer>
   );

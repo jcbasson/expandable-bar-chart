@@ -12,8 +12,12 @@ export const YAxis: React.FC<IYAxis> = ({ maxYValue, yValueIncrements }) => {
     <YAxisContainer maxYValue={maxYValue}>
       {_.range(1, maxYValue + 1)
         .reverse()
-        .map(i => (
-          <YMeasurement value={i} valueIncrements={yValueIncrements} />
+        .map((yValue: number) => (
+          <YMeasurement
+            key={yValue}
+            value={yValue}
+            valueIncrements={yValueIncrements}
+          />
         ))}
     </YAxisContainer>
   );

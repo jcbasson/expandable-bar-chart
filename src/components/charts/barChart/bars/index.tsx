@@ -12,7 +12,7 @@ export const Bars: React.FC<IBars> = ({ maxYValue, bars }) => {
   return (
     <StyledBars maxYValue={maxYValue}>
       {bars.map(bar => (
-        <Bar {...bar} />
+        <Bar key={bar.id} {...bar} />
       ))}
     </StyledBars>
   );
