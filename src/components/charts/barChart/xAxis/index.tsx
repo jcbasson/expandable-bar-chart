@@ -3,29 +3,35 @@ import styled from "styled-components";
 import _ from "lodash";
 
 interface IXAxis {
-  readonly maxYValue: number;
-  readonly yValueIncrements: number;
+  readonly numberOfHorizontalLines: number;
+  readonly yAxisHeight: number;
 }
-export const XAxis: React.FC<IXAxis> = ({ maxYValue, yValueIncrements }) => {
-  const numberOfXAxisLines = maxYValue / yValueIncrements;
-
+//TODO: Break out the horizontal lines from the x-axis, left it here to simplify things for now
+export const XAxis: React.FC<IXAxis> = ({
+  yAxisHeight,
+  numberOfHorizontalLines
+}) => {
   return (
-    <XAxisContainer maxYValue={maxYValue}>
-      {_.range(0, numberOfXAxisLines)
+    <XAxisContainer yAxisHeight={yAxisHeight}>
+      {_.range(0, numberOfHorizontalLines)
         .reverse()
         .map((axisLineCount: number) => (
-          <XAxisLines key={axisLineCount} yValueIncrements={yValueIncrements} />
+          <XAxisLines
+            key={axisLineCount}
+            yAxisHeight={yAxisHeight}
+            numberOfHorizontalLines={numberOfHorizontalLines}
+          />
         ))}
     </XAxisContainer>
   );
 };
 
-const XAxisContainer = styled.div<Pick<IXAxis, "maxYValue">>`
+const XAxisContainer = styled.div<Pick<IXAxis, "yAxisHeight">>`
   float: left;
   position: absolute;
   top: 0;
   right: 0;
-  height: ${({ maxYValue }) => maxYValue * 20}px;
+  height: ${({ yAxisHeight }) => yAxisHeight}px;
   width: 90%;
   z-index: 0;
   border-bottom: 1px solid #8f9092;
@@ -34,8 +40,9 @@ const XAxisContainer = styled.div<Pick<IXAxis, "maxYValue">>`
   justify-content: flex-end;
 `;
 
-const XAxisLines = styled.span<{ yValueIncrements: number }>`
-  height: ${({ yValueIncrements }) => yValueIncrements * 20}px;
+const XAxisLines = styled.span<IXAxis>`
+  height: ${({ yAxisHeight, numberOfHorizontalLines }) =>
+    yAxisHeight / numberOfHorizontalLines}px;
   width: 100%;
   border-top: 1px solid #e5e6e8;
 `;

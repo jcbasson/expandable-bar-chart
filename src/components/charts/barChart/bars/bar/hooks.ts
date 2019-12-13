@@ -6,12 +6,14 @@ export const useVerticalResizeHandler = ({
   barId,
   barRef,
   maxYValue,
-  yAxisUnit
+  chartBarId,
+  yAxisUnitPixels
 }: {
   barId: string;
   barRef: React.MutableRefObject<HTMLDivElement>;
   maxYValue: number;
-  yAxisUnit: number;
+  chartBarId: string;
+  yAxisUnitPixels: number;
 }) => {
   const resizeButtonRef = useRef();
 
@@ -34,7 +36,7 @@ export const useVerticalResizeHandler = ({
         newMouseYCoordinate: event.pageY,
         barElement,
         barTrackerLineElement,
-        yAxisUnit
+        yAxisUnitPixels
       });
     };
 

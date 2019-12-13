@@ -1,27 +1,24 @@
 import * as React from "react";
 import styled from "styled-components";
-import _ from "lodash";
-
-interface IYMeasurement {
-  readonly value: number;
-  readonly valueIncrements: number;
-}
+import { IYMeasurement } from "./types";
 
 export const YMeasurement: React.FC<IYMeasurement> = ({
   value,
-  valueIncrements
+  yAxisUnitPixels,
+  displayValue
 }) => {
-  const displayValue = value % valueIncrements === 0;
   return (
-    <YMeasurementContainer>
+    <YMeasurementContainer yAxisUnitPixels={yAxisUnitPixels}>
       {displayValue && <YMeasurementValue>{value}</YMeasurementValue>}
       <YMeasurementLine></YMeasurementLine>
     </YMeasurementContainer>
   );
 };
 
-const YMeasurementContainer = styled.div`
-  flex: 0 0 20px;
+const YMeasurementContainer = styled.div<
+  Pick<IYMeasurement, "yAxisUnitPixels">
+>`
+  flex: 0 0 ${({ yAxisUnitPixels }) => yAxisUnitPixels}px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
