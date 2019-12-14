@@ -23,7 +23,7 @@ export type AdjustBarYValueToNearestYAxisUnit = (
   yAxisUnitPixels: number
 ) => (barYValue: number) => number;
 
-export type GenerateBarHeight = (
+export type MakeBarHeight = (
   maxYValue: number,
   yAxisUnitPixels: number
 ) => Function;

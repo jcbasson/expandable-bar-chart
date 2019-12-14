@@ -8,7 +8,7 @@ import {
   CalculateBarHeight,
   RestrictBarYPixels,
   AdjustBarYValueToNearestYAxisUnit,
-  GenerateBarHeight,
+  MakeBarHeight,
   CalculateBarTrackerLineYValue,
   ISetBarHeight,
   RestrictBarYValue
@@ -36,10 +36,7 @@ const adjustBarYValueToNearestYAxisUnit: AdjustBarYValueToNearestYAxisUnit = yAx
   return _.partialRight(roundNumberToNearestMultiple, yAxisUnitPixels);
 };
 
-export const generateBarHeight: GenerateBarHeight = (
-  maxYValue,
-  yAxisUnitPixels
-) => {
+export const makeBarHeight: MakeBarHeight = (maxYValue, yAxisUnitPixels) => {
   return fp.pipe(
     calculateBarHeight,
     restrictBarYPixels(0, maxYValue, yAxisUnitPixels),
@@ -64,10 +61,10 @@ export const setBarHeight: ISetBarHeight = ({
   barTrackerLineElement,
   yAxisUnitPixels
 }) => {
-  const makeBarHeight = generateBarHeight(maxYValue, yAxisUnitPixels);
+  const generateBarHeight = makeBarHeight(maxYValue, yAxisUnitPixels);
 
   //TODO: Possibly memoize here if performance becomes issue
-  const barHeight = makeBarHeight(
+  const barHeight = generateBarHeight(
     originalBarHeight,
     previousMouseYCoordinate,
     newMouseYCoordinate
