@@ -1,4 +1,4 @@
-import { IBar } from "./bar";
+import { IBar } from "./bar/types";
 
 export interface IBars {
   readonly maxYValue: number;

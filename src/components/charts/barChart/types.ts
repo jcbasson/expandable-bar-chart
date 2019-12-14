@@ -1,4 +1,5 @@
 import { IState, IBarChartState } from "../../../types";
+import { IBarChartsState } from "../../../types";
 
 export interface IBarChart {
   readonly id: string;
@@ -30,3 +31,9 @@ export type CalculateYAxisUnitPixels = (
   yAxisHeight: number,
   maxYValue: number
 ) => number;
+
+export type UpdateBarChartMaxY = (
+  barChartsState: IBarChartsState,
+  barChartId: string,
+  maxY: number
+) => IBarChartsState;

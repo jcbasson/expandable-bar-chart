@@ -4,7 +4,8 @@ import {
   GetBarChartById,
   GetBarChartMaxY,
   CalculateYAxisUnitPx,
-  CalculateYAxisUnitPixels
+  CalculateYAxisUnitPixels,
+  UpdateBarChartMaxY
 } from "./types";
 
 export const makeGetBarChartMaxY = () =>
@@ -28,4 +29,21 @@ export const calculateYAxisUnitPixels: CalculateYAxisUnitPixels = (
   maxYValue
 ) => {
   return yAxisHeight / maxYValue;
+};
+
+export const updateBarChartMaxY: UpdateBarChartMaxY = (
+  barChartsState,
+  barChartId,
+  maxY
+) => {
+  const barCharts = _.get(barChartsState, "byId");
+
+  return {
+    byId: {
+      ...barCharts,
+      [barChartId]: {
+        maxY
+      }
+    }
+  };
 };

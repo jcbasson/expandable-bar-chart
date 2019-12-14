@@ -1,5 +1,6 @@
 import { SET_MAX_Y } from "./maxYSetter/actions";
 import { IBarChartsState } from "../../../types";
+import { updateBarChartMaxY } from "./utils";
 
 const defaultState: IBarChartsState = {
   byId: {
@@ -15,10 +16,9 @@ export const barChartReducer = (
 ): IBarChartsState => {
   switch (action.type) {
     case SET_MAX_Y:
-      console.log("state = ", state);
-      console.log("action = ", action);
-      // byId:chart1: {maxY: 20
-      return { ...state };
+      const { barChartId, maxY } = action;
+
+      return { ...state, ...updateBarChartMaxY(state, barChartId, maxY) };
     default:
       return state;
   }

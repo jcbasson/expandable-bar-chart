@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import _ from "lodash";
-import { setBarYValue } from "./utils";
+import { setBarHeight } from "./utils";
 
 export const useVerticalResizeHandler = ({
   barId,
@@ -29,7 +29,7 @@ export const useVerticalResizeHandler = ({
     let originalBarHeight = 0;
 
     const mouseMoveHandler = (event: MouseEvent): void => {
-      setBarYValue({
+      setBarHeight({
         maxYValue,
         originalBarHeight,
         previousMouseYCoordinate,
@@ -68,13 +68,13 @@ export const useVerticalResizeHandler = ({
       if (resizeButtonElement) {
         ///TODO: Look into a typescript strict null/undefined check set false not working as should
         // @ts-ignore
-        resizeButtonElement.removeEventListener("mousedown");
+        resizeButtonElement.removeEventListener("mousedown", mouseDownHandler);
       }
 
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };
-  }, [resizeButtonRef.current]);
+  }, [barId, maxYValue, chartBarId, yAxisUnitPixels]);
 
   return [resizeButtonRef];
 };

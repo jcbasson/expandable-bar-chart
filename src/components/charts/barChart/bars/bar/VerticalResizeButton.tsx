@@ -21,6 +21,7 @@ export const VerticalResizeButton: React.FC<IVerticalResizeButton> = ({
   const maxYValue = useSelector((state: IState): number =>
     makeGetBarChartMaxY()(state, chartBarId)
   );
+  console.log("VerticalResizeButton yPx = ", yAxisUnitPixels);
   const [resizeButtonRef] = useVerticalResizeHandler({
     barId,
     barRef,
