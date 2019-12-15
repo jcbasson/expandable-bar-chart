@@ -6,6 +6,7 @@ export const App: React.FC = () => {
   return (
     <AppContainer>
       <GlobalWarmingChart></GlobalWarmingChart>
+      <GlobalWarmingChart></GlobalWarmingChart>
     </AppContainer>
   );
 };

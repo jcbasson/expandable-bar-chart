@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { YAxis } from "./yAxis";
 import { XAxis } from "./xAxis";
@@ -8,22 +8,36 @@ import { MaxYSetter } from "./maxYSetter";
 import {
   setYAxisMaximum,
   restrictYAxisMaximum,
-  calculateYAxisUnitPixels
+  calculateYAxisUnitPixels,
+  getMinValueAllowedForYAxisMax
 } from "./utils";
 import { BarChartSettingsContext } from "./context";
 
 export const BarChart: React.FC<IBarChart> = ({
   yAxisHeight,
   xAxisWidth,
-  data
+  maxValueAllowedForYAxisMax,
+  defaultYAxisMax,
+  data,
+  isReadOnly
 }) => {
-  const [maxY, setMaxY] = useState("20");
-  const maxYValue = restrictYAxisMaximum(maxY, 1, 100);
+  const minValueAllowedForYAxisMax = getMinValueAllowedForYAxisMax(data);
+  const [maxY, setMaxY] = useState(defaultYAxisMax.toString());
+  const maxYValue = restrictYAxisMaximum(
+    maxY,
+    minValueAllowedForYAxisMax,
+    maxValueAllowedForYAxisMax
+  );
   const yAxisUnitPixels = calculateYAxisUnitPixels(yAxisHeight, maxYValue);
 
   return (
     <BarChartSettingsContext.Provider
-      value={{ maxYValue, yAxisHeight, yAxisUnitPixels }}
+      value={{
+        maxYValue,
+        yAxisHeight,
+        yAxisUnitPixels,
+        isReadOnly
+      }}
     >
       <BarChartContainer>
         <MaxYSetter

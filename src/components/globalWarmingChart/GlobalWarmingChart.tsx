@@ -17,7 +17,14 @@ export const GlobalWarmingChart = () => {
   return (
     <RandomInfoChartContainer>
       <Header>Global Warming Levels</Header>
-      <BarChart xAxisWidth={450} yAxisHeight={400} data={barData}></BarChart>
+      <BarChart
+        maxValueAllowedForYAxisMax={100}
+        defaultYAxisMax={20}
+        xAxisWidth={450}
+        yAxisHeight={400}
+        data={barData}
+        isReadOnly={false}
+      ></BarChart>
     </RandomInfoChartContainer>
   );
 };

@@ -15,7 +15,7 @@ export const Bar: React.FC<IBar> = ({
 
   return (
     <BarChartSettingsContext.Consumer>
-      {({ yAxisUnitPixels, maxYValue, yAxisHeight }) => {
+      {({ yAxisUnitPixels, maxYValue, yAxisHeight, isReadOnly }) => {
         return (
           <StyledBar
             ref={barRef}
@@ -23,12 +23,14 @@ export const Bar: React.FC<IBar> = ({
             color={color}
             yAxisUnitPixels={yAxisUnitPixels}
           >
-            <VerticalResizeButton
-              barRef={barRef}
-              yAxisHeight={yAxisHeight}
-              yAxisUnitPixels={yAxisUnitPixels}
-              onYValueChange={onYValueChange}
-            ></VerticalResizeButton>
+            {!isReadOnly && (
+              <VerticalResizeButton
+                barRef={barRef}
+                yAxisHeight={yAxisHeight}
+                yAxisUnitPixels={yAxisUnitPixels}
+                onYValueChange={onYValueChange}
+              ></VerticalResizeButton>
+            )}
             <BarLabel>{barName}</BarLabel>
           </StyledBar>
         );

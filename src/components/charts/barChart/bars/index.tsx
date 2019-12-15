@@ -41,7 +41,7 @@ const BarTrackerLine = styled.span`
 const BarTrackerValue = styled.span`
   align-self: start;
   position: absolute;
-  right: -22px;
+  right: -24px;
   top: -6px;
   display: none;
 `;

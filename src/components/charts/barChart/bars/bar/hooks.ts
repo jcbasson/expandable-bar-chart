@@ -18,16 +18,18 @@ export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
   const resizeButtonRef = useRef();
 
   useEffect(() => {
-    const resizeButtonElement = _.get(resizeButtonRef, "current");
-    //@ts-ignore
-    const barElement = barRef.current as HTMLElement;
+    const resizeButtonElement = _.get(
+      resizeButtonRef,
+      "current"
+    ) as HTMLElement;
+    const barElement = _.get(barRef, "current") as HTMLElement;
     /*Accessing the DOM directly because I did not want to prop drill a ref for this
       And the react context does not allow me use this hook in it's callback
     */
-    const barTrackerLineElement = document.querySelector(
+    const barTrackerLineElement = barElement.parentElement.querySelector(
       ".bar-tracker-line"
     ) as HTMLElement;
-    const barTrackerValueElement = document.querySelector(
+    const barTrackerValueElement = barElement.parentElement.querySelector(
       ".bar-tracker-value"
     ) as HTMLElement;
     let previousMouseYCoordinate = 0;

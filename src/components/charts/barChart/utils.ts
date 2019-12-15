@@ -3,7 +3,9 @@ import _ from "lodash";
 import {
   CalculateYAxisUnitPx,
   CalculateYAxisUnitPixels,
-  RestrictYAxisMaximum
+  RestrictYAxisMaximum,
+  GetMinValueAllowedForYAxisMax,
+  BarYValueMinComparator
 } from "./types";
 import {
   convertStringToInt,
@@ -46,4 +48,12 @@ export const restrictYAxisMaximum: RestrictYAxisMaximum = (
   } else if (!isNaN(maxYValue) && maxYValue > maxValMaxY) {
     return maxValMaxY;
   }
+};
+
+const barYValueMinComparator: BarYValueMinComparator = (minYValue, barData) => {
+  return minYValue > barData.yValue ? minYValue : barData.yValue;
+};
+
+export const getMinValueAllowedForYAxisMax: GetMinValueAllowedForYAxisMax = barData => {
+  return barData.reduce(barYValueMinComparator, 0);
 };
