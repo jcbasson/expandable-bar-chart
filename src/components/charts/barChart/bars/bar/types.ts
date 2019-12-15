@@ -35,22 +35,32 @@ export type MakeBarHeight = (
   yAxisUnitPixels: number
 ) => Function;
 
-export type CalculateBarTrackerLineYValue = (
+export type CalculateBarTrackerYCoordinate = (
   barYValue: number,
   maxYValue: number,
   yAxisUnitPixels: number
 ) => number;
 
-export interface ISetBarHeightParams {
+export interface ISetBarParams {
   readonly maxYValue: number;
   readonly originalBarHeight: number;
   readonly previousMouseYCoordinate: number;
   readonly newMouseYCoordinate: number;
   readonly barElement: HTMLElement;
   readonly barTrackerLineElement: HTMLElement;
+  readonly barTrackerValueElement: HTMLElement;
   readonly yAxisUnitPixels: number;
 }
-export type ISetBarHeight = (params: ISetBarHeightParams) => void;
+export type SetBar = (params: ISetBarParams) => void;
+
+export type SetBarTracker = (
+  barHeight: number,
+  maxYValue: number,
+  yAxisUnitPixels: number
+) => (
+  trackerLineElement: HTMLElement,
+  trackerValueElement: HTMLElement
+) => void;
 
 export type RestrictBarYValue = (maxYValue: number, yValue: number) => number;
 
@@ -68,6 +78,6 @@ export type UseVerticalResizeHandler = (
 export type GetBarHeight = (barElement: HTMLElement) => number;
 
 export type CalculateCurrentYValue = (
-  barElement: HTMLElement,
+  barHeight: number,
   yAxisUnitPixels: number
 ) => number;

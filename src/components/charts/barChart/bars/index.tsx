@@ -11,6 +11,7 @@ export const Bars: React.FC<IBars> = ({ bars, yAxisHeight }) => {
         <Bar key={bar.barName} {...bar} />
       ))}
       <BarTrackerLine className="bar-tracker-line" />
+      <BarTrackerValue className="bar-tracker-value"></BarTrackerValue>
     </StyledBars>
   );
 };
@@ -34,5 +35,13 @@ const BarTrackerLine = styled.span`
   width: 450px;
   position: absolute;
   left: -26px;
+  display: none;
+`;
+
+const BarTrackerValue = styled.span`
+  align-self: start;
+  position: absolute;
+  right: -22px;
+  top: -6px;
   display: none;
 `;

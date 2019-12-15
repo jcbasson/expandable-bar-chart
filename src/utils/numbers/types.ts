@@ -1,5 +1,3 @@
-import { maxHeaderSize } from "http";
-
 export type RestrictNumberToRange = (
   min: number,
   max: number,

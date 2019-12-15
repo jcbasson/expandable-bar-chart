@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import _ from "lodash";
-import { setBarHeight, getBarHeight, calculateCurrentYValue } from "./utils";
+import { setBar, getBarHeight, calculateCurrentYValue } from "./utils";
 import { UseVerticalResizeHandler } from "./types";
+import { hideElements } from "../../../../../utils/dom/domUtils";
 
 export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
   barRef,
@@ -19,26 +20,31 @@ export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
     const barTrackerLineElement = document.querySelector(
       ".bar-tracker-line"
     ) as HTMLElement;
+    const barTrackerValueElement = document.querySelector(
+      ".bar-tracker-value"
+    ) as HTMLElement;
     let previousMouseYCoordinate = 0;
     let originalBarHeight = 0;
 
     const mouseMoveHandler = (event: MouseEvent): void => {
-      setBarHeight({
+      setBar({
         maxYValue,
         originalBarHeight,
         previousMouseYCoordinate,
         newMouseYCoordinate: event.pageY,
         barElement,
         barTrackerLineElement,
+        barTrackerValueElement,
         yAxisUnitPixels
       });
     };
 
     const mouseUpHandler = (): void => {
-      barTrackerLineElement.style.display = "none";
+      hideElements([barTrackerLineElement, barTrackerValueElement]);
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
-      onYValueChange(calculateCurrentYValue(barElement, yAxisUnitPixels));
+      const barHeight = getBarHeight(barElement);
+      onYValueChange(calculateCurrentYValue(barHeight, yAxisUnitPixels));
     };
 
     const mouseDownHandler = (event: MouseEvent): void => {

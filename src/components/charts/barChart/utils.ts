@@ -8,7 +8,7 @@ import {
 import {
   convertStringToInt,
   isNumberInRange
-} from "../../../utils/numberUtils";
+} from "../../../utils/numbers/numberUtils";
 
 export const calculateYAxisUnitPx: CalculateYAxisUnitPx = (
   maxYValue,
