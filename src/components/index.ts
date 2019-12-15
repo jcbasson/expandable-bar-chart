@@ -1,7 +1,7 @@
 import { App } from "./app";
-import { barChartReducer } from "./charts/barChart";
+import { globalWarmingReducer } from "./globalWarmingChart/reducers";
 
 const reducers = {
-  barCharts: barChartReducer
+  globalWarming: globalWarmingReducer
 };
 export { App, reducers };

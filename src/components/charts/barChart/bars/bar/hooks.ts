@@ -1,19 +1,13 @@
 import { useEffect, useRef } from "react";
 import _ from "lodash";
-import { setBarHeight } from "./utils";
+import { setBarHeight, getBarHeight, calculateCurrentYValue } from "./utils";
+import { UseVerticalResizeHandler } from "./types";
 
-export const useVerticalResizeHandler = ({
-  barId,
+export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
   barRef,
   maxYValue,
-  chartBarId,
-  yAxisUnitPixels
-}: {
-  barId: string;
-  barRef: React.MutableRefObject<HTMLDivElement>;
-  maxYValue: number;
-  chartBarId: string;
-  yAxisUnitPixels: number;
+  yAxisUnitPixels,
+  onYValueChange
 }) => {
   const resizeButtonRef = useRef();
 
@@ -44,15 +38,11 @@ export const useVerticalResizeHandler = ({
       barTrackerLineElement.style.display = "none";
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
+      onYValueChange(calculateCurrentYValue(barElement, yAxisUnitPixels));
     };
 
     const mouseDownHandler = (event: MouseEvent): void => {
-      originalBarHeight = parseFloat(
-        getComputedStyle(barElement, null)
-          .getPropertyValue("height")
-          .replace("px", "")
-      );
-
+      originalBarHeight = getBarHeight(barElement);
       previousMouseYCoordinate = event.pageY;
 
       window.addEventListener("mousemove", mouseMoveHandler);
@@ -74,7 +64,7 @@ export const useVerticalResizeHandler = ({
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };
-  }, [barId, maxYValue, chartBarId, yAxisUnitPixels]);
+  }, [maxYValue, yAxisUnitPixels]);
 
   return [resizeButtonRef];
 };

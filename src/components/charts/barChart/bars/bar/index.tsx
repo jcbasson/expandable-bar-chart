@@ -3,48 +3,53 @@ import styled from "styled-components";
 import _ from "lodash";
 import { VerticalResizeButton } from "./VerticalResizeButton";
 import { IBar } from "./types";
-import { calculateYAxisUnitPixels } from "../../utils";
 import { restrictBarYValue } from "./utils";
+import { BarChartSettingsContext } from "../../context";
 
 export const Bar: React.FC<IBar> = ({
-  id,
-  yCoordinate,
+  barName,
+  yValue,
   color,
-  maxYValue,
-  chartBarId,
-  yAxisHeight
+  onYValueChange
 }) => {
-  console.log("yAxisHeight = ", yAxisHeight);
-  console.log("maxYValue = ", maxYValue);
-  const yAxisUnitPixels = calculateYAxisUnitPixels(yAxisHeight, maxYValue);
-  console.log("yAxisUnitPixels = ", yAxisUnitPixels);
-
   const barRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const yValue = restrictBarYValue(maxYValue, yCoordinate);
 
   return (
-    <StyledBar
-      ref={barRef}
-      yCoordinate={yValue}
-      color={color}
-      yAxisUnitPixels={yAxisUnitPixels}
-    >
-      <VerticalResizeButton
-        chartBarId={chartBarId}
-        barId={id}
-        barRef={barRef}
-        yAxisUnitPixels={yAxisUnitPixels}
-      ></VerticalResizeButton>
-    </StyledBar>
+    <BarChartSettingsContext.Consumer>
+      {({ yAxisUnitPixels, maxYValue }) => {
+        return (
+          <StyledBar
+            ref={barRef}
+            yValue={restrictBarYValue(maxYValue, yValue)}
+            color={color}
+            yAxisUnitPixels={yAxisUnitPixels}
+          >
+            <VerticalResizeButton
+              barRef={barRef}
+              maxYValue={maxYValue}
+              yAxisUnitPixels={yAxisUnitPixels}
+              onYValueChange={onYValueChange}
+            ></VerticalResizeButton>
+            <BarLabel>{barName}</BarLabel>
+          </StyledBar>
+        );
+      }}
+    </BarChartSettingsContext.Consumer>
   );
 };
 
 const StyledBar = styled.div<
-  Pick<IBar, "color" | "yCoordinate"> & { yAxisUnitPixels: number }
+  Pick<IBar, "color" | "yValue"> & { yAxisUnitPixels: number }
 >`
   background-color: ${({ color }) => color};
   width: 100px;
-  height: ${({ yCoordinate, yAxisUnitPixels }) =>
-    yCoordinate * yAxisUnitPixels}px;
+  height: ${({ yValue, yAxisUnitPixels }) => yValue * yAxisUnitPixels}px;
   border: 1px solid #000;
+`;
+
+const BarLabel = styled.label`
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  font-size: 20px;
 `;

@@ -8,7 +8,7 @@ export const Bars: React.FC<IBars> = ({ bars, yAxisHeight }) => {
   return (
     <StyledBars yAxisHeight={yAxisHeight}>
       {bars.map(bar => (
-        <Bar key={bar.id} {...bar} />
+        <Bar key={bar.barName} {...bar} />
       ))}
       <BarTrackerLine className="bar-tracker-line" />
     </StyledBars>

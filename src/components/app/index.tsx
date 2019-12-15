@@ -1,11 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
-import { BarChart } from "../charts/barChart";
+import { GlobalWarmingChart } from "../globalWarmingChart";
 
 export const App: React.FC = () => {
   return (
     <AppContainer>
-      <BarChart id={"chart1"} width={450} height={400} data={[]}></BarChart>
+      <GlobalWarmingChart></GlobalWarmingChart>
     </AppContainer>
   );
 };

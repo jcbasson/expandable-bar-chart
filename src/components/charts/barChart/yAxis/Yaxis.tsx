@@ -10,8 +10,6 @@ export const YAxis: React.FC<IYAxis> = ({
   yAxisHeight,
   yAxisDisplayValueEveryBarCount
 }) => {
-  const yAxisUnitPixels = calculateYAxisUnitPixels(yAxisHeight, maxYValue);
-
   return (
     <YAxisContainer yAxisHeight={yAxisHeight}>
       {_.range(1, maxYValue + 1)
@@ -23,7 +21,6 @@ export const YAxis: React.FC<IYAxis> = ({
               key={yValue}
               value={yValue}
               displayValue={displayValue}
-              yAxisUnitPixels={yAxisUnitPixels}
             />
           );
         })}

@@ -1,23 +1,25 @@
 import * as React from "react";
 import styled from "styled-components";
 import { IYMeasurement } from "./types";
+import { BarChartSettingsContext } from "../context";
 
 export const YMeasurement: React.FC<IYMeasurement> = ({
   value,
-  yAxisUnitPixels,
   displayValue
 }) => {
   return (
-    <YMeasurementContainer yAxisUnitPixels={yAxisUnitPixels}>
-      {displayValue && <YMeasurementValue>{value}</YMeasurementValue>}
-      <YMeasurementLine></YMeasurementLine>
-    </YMeasurementContainer>
+    <BarChartSettingsContext.Consumer>
+      {({ yAxisUnitPixels }) => (
+        <YMeasurementContainer yAxisUnitPixels={yAxisUnitPixels}>
+          {displayValue && <YMeasurementValue>{value}</YMeasurementValue>}
+          <YMeasurementLine></YMeasurementLine>
+        </YMeasurementContainer>
+      )}
+    </BarChartSettingsContext.Consumer>
   );
 };
 
-const YMeasurementContainer = styled.div<
-  Pick<IYMeasurement, "yAxisUnitPixels">
->`
+const YMeasurementContainer = styled.div<{ yAxisUnitPixels: number }>`
   flex: 0 0 ${({ yAxisUnitPixels }) => yAxisUnitPixels}px;
   display: flex;
   align-items: flex-start;
@@ -28,7 +30,7 @@ const YMeasurementContainer = styled.div<
 const YMeasurementValue = styled.span`
   color: #898a8c;
   font-weight: bold;
-  width: 20px;
+  width: 30px;
   position: absolute;
   top: -10px;
   right: 10px;

@@ -1,15 +1,10 @@
-export interface IBarChartState {
-  maxY: number;
-}
-
-export interface IBarChartsState {
-  byId: {
-    [barChartId: string]: IBarChartState | null;
-  };
+export interface IGlobalWarmingState {
+  co2Level: number;
+  oceanLevel: number;
+  temperatureLevel: number;
+  governmentEffortLevels: number;
 }
 
 export interface IState {
-  charts: {
-    barCharts: IBarChartsState;
-  };
+  globalWarming: IGlobalWarmingState;
 }

@@ -1,33 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 import { useVerticalResizeHandler } from "./hooks";
-import { IState } from "../../../../../types";
-import { makeGetBarChartMaxY } from "../../utils";
-
-export interface IVerticalResizeButton {
-  readonly barId: string;
-  readonly barRef: React.MutableRefObject<HTMLDivElement>;
-  readonly yAxisUnitPixels: number;
-  readonly chartBarId: string;
-}
+import { IVerticalResizeButton } from "./types";
 
 export const VerticalResizeButton: React.FC<IVerticalResizeButton> = ({
-  barId,
   barRef,
   yAxisUnitPixels,
-  chartBarId
+  onYValueChange,
+  maxYValue
 }) => {
-  const maxYValue = useSelector((state: IState): number =>
-    makeGetBarChartMaxY()(state, chartBarId)
-  );
-  console.log("VerticalResizeButton yPx = ", yAxisUnitPixels);
   const [resizeButtonRef] = useVerticalResizeHandler({
-    barId,
     barRef,
     maxYValue,
     yAxisUnitPixels,
-    chartBarId
+    onYValueChange
   });
   return (
     <VerticalResizeButtonContainer>
@@ -38,7 +24,6 @@ export const VerticalResizeButton: React.FC<IVerticalResizeButton> = ({
 
 const VerticalResizeButtonContainer = styled.div`
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
   display: flex;
   justify-content: center;

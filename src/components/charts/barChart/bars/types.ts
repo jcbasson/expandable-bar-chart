@@ -1,7 +1,11 @@
-import { IBar } from "./bar/types";
+export interface IBarData {
+  readonly barName: string;
+  readonly yValue: number;
+  readonly color: string;
+  readonly onYValueChange: Function;
+}
 
 export interface IBars {
-  readonly maxYValue: number;
-  readonly bars: IBar[];
+  readonly bars: IBarData[];
   readonly yAxisHeight: number;
 }

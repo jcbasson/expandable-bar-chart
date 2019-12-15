@@ -6,6 +6,5 @@ export interface IYAxis {
 
 export interface IYMeasurement {
   readonly value: number;
-  readonly yAxisUnitPixels: number;
   readonly displayValue: boolean;
 }

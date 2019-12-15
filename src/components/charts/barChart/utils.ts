@@ -1,23 +1,14 @@
-import { createSelector } from "reselect";
+import { SyntheticEvent } from "react";
 import _ from "lodash";
 import {
-  GetBarChartById,
-  GetBarChartMaxY,
   CalculateYAxisUnitPx,
   CalculateYAxisUnitPixels,
-  UpdateBarChartMaxY
+  RestrictYAxisMaximum
 } from "./types";
-
-export const makeGetBarChartMaxY = () =>
-  createSelector(getCBarChartId, getBarChartMaxY);
-
-export const getCBarChartId: GetBarChartById = (state, barChartId) => {
-  return _.get(state, `barCharts.byId.${barChartId}`);
-};
-
-export const getBarChartMaxY: GetBarChartMaxY = barChart => {
-  return _.get(barChart, "maxY", 0);
-};
+import {
+  convertStringToInt,
+  isNumberInRange
+} from "../../../utils/numberUtils";
 
 export const calculateYAxisUnitPx: CalculateYAxisUnitPx = (
   maxYValue,
@@ -31,19 +22,28 @@ export const calculateYAxisUnitPixels: CalculateYAxisUnitPixels = (
   return yAxisHeight / maxYValue;
 };
 
-export const updateBarChartMaxY: UpdateBarChartMaxY = (
-  barChartsState,
-  barChartId,
-  maxY
-) => {
-  const barCharts = _.get(barChartsState, "byId");
+export const setYAxisMaximum = (
+  setMaxY: React.Dispatch<React.SetStateAction<string>>
+) => (event: SyntheticEvent) => {
+  const maxYValue = _.get(event, "target.value", "");
+  setMaxY(isNaN(maxYValue) ? "" : maxYValue);
+};
 
-  return {
-    byId: {
-      ...barCharts,
-      [barChartId]: {
-        maxY
-      }
-    }
-  };
+export const restrictYAxisMaximum: RestrictYAxisMaximum = (
+  maxY,
+  minValMaxY,
+  maxValMaxY
+) => {
+  /* See if the max Y axis value is in a range
+     If max Y is not a number or smaller than the min value it is allowed to be return the min value it is allowed to be
+     If max Y is a number and is greater than the max value it is allowed to be return the max value it is allowed to be
+  */
+  const maxYValue = convertStringToInt(maxY);
+  if (!isNaN(maxYValue) && isNumberInRange(minValMaxY, maxValMaxY, maxYValue)) {
+    return maxYValue;
+  } else if (isNaN(maxYValue) || maxYValue < minValMaxY) {
+    return minValMaxY;
+  } else if (!isNaN(maxYValue) && maxYValue > maxValMaxY) {
+    return maxValMaxY;
+  }
 };

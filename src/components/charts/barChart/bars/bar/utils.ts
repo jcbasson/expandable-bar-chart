@@ -11,7 +11,9 @@ import {
   MakeBarHeight,
   CalculateBarTrackerLineYValue,
   ISetBarHeight,
-  RestrictBarYValue
+  RestrictBarYValue,
+  GetBarHeight,
+  CalculateCurrentYValue
 } from "./types";
 
 const calculateBarHeight: CalculateBarHeight = (
@@ -62,13 +64,13 @@ export const setBarHeight: ISetBarHeight = ({
   yAxisUnitPixels
 }) => {
   const generateBarHeight = makeBarHeight(maxYValue, yAxisUnitPixels);
-
   //TODO: Possibly memoize here if performance becomes issue
   const barHeight = generateBarHeight(
     originalBarHeight,
     previousMouseYCoordinate,
     newMouseYCoordinate
   );
+
   //TODO: Possibly memoize here if performance becomes issue
   barTrackerLineElement.style.top = `${calculateBarTrackerLineYValue(
     barHeight,
@@ -82,4 +84,21 @@ export const setBarHeight: ISetBarHeight = ({
 
 export const restrictBarYValue: RestrictBarYValue = (maxYValue, yValue) => {
   return yValue > maxYValue ? maxYValue : yValue;
+};
+
+export const getBarHeight: GetBarHeight = barElement => {
+  return parseFloat(
+    getComputedStyle(barElement, null)
+      .getPropertyValue("height")
+      .replace("px", "")
+  );
+};
+
+export const calculateCurrentYValue: CalculateCurrentYValue = (
+  barElement,
+  yAxisUnitPixels
+) => {
+  const barHeight = getBarHeight(barElement);
+
+  return Math.ceil(barHeight / yAxisUnitPixels);
 };

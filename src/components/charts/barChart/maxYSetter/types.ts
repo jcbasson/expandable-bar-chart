@@ -1,12 +1,6 @@
-export interface IMaxYSetter {
-  readonly barChartId: string;
-  readonly maxY: number;
-}
+import { ChangeEvent } from "react";
 
-export type SetMaxY = ({
-  barChartId,
-  maxY
-}: {
-  barChartId: string;
-  maxY: number;
-}) => { type: string; barChartId: string; maxY: number };
+export interface IMaxYSetter {
+  readonly maxY: string;
+  readonly setMaxYHandler: (event: ChangeEvent<HTMLInputElement>) => void;
+}

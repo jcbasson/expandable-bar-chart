@@ -1,10 +1,17 @@
+import React from "react";
+
 export interface IBar {
-  readonly id: string;
-  readonly yCoordinate: number;
+  readonly barName: string;
+  readonly yValue: number;
   readonly color: string;
+  readonly onYValueChange: Function;
+}
+
+export interface IVerticalResizeButton {
+  readonly barRef: React.MutableRefObject<HTMLDivElement>;
+  readonly yAxisUnitPixels: number;
   readonly maxYValue: number;
-  readonly chartBarId: string;
-  readonly yAxisHeight: number;
+  readonly onYValueChange: Function;
 }
 
 export type CalculateBarHeight = (
@@ -46,3 +53,21 @@ export interface ISetBarHeightParams {
 export type ISetBarHeight = (params: ISetBarHeightParams) => void;
 
 export type RestrictBarYValue = (maxYValue: number, yValue: number) => number;
+
+export interface UseVerticalResizeHandlerParams {
+  barRef: React.MutableRefObject<HTMLDivElement>;
+  maxYValue: number;
+  yAxisUnitPixels: number;
+  onYValueChange: Function;
+}
+
+export type UseVerticalResizeHandler = (
+  params: UseVerticalResizeHandlerParams
+) => any[];
+
+export type GetBarHeight = (barElement: HTMLElement) => number;
+
+export type CalculateCurrentYValue = (
+  barElement: HTMLElement,
+  yAxisUnitPixels: number
+) => number;

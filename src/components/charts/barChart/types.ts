@@ -1,26 +1,16 @@
-import { IState, IBarChartState } from "../../../types";
-import { IBarChartsState } from "../../../types";
+import { IBarData } from "./bars/types";
 
 export interface IBarChart {
-  readonly id: string;
-  readonly height: number;
-  readonly width: number;
+  readonly yAxisHeight: number;
+  readonly xAxisWidth: number;
   readonly data: IBarData[];
 }
 
-export interface IBarData {
-  readonly chartId: string;
-  readonly yValue: number;
-  readonly color: string;
-  readonly onYValueChange: Function;
+export interface IBarChartSettingsContext {
+  readonly maxYValue: number;
+  readonly yAxisHeight: number;
+  readonly yAxisUnitPixels: number;
 }
-
-export type GetBarChartById = (
-  state: IState,
-  barChartId: string
-) => IBarChartState;
-
-export type GetBarChartMaxY = (barChart: IBarChartState) => number;
 
 export type CalculateYAxisUnitPx = (
   maxYValue: number,
@@ -32,8 +22,8 @@ export type CalculateYAxisUnitPixels = (
   maxYValue: number
 ) => number;
 
-export type UpdateBarChartMaxY = (
-  barChartsState: IBarChartsState,
-  barChartId: string,
-  maxY: number
-) => IBarChartsState;
+export type RestrictYAxisMaximum = (
+  maxY: string,
+  minValMaxY: number,
+  maxValMaxY: number
+) => number;
