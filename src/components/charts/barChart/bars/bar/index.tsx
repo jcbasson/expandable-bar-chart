@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import _ from "lodash";
 import { VerticalResizeButton } from "./VerticalResizeButton";
 import { IBar } from "./types";
 import { restrictBarYValue } from "./utils";
@@ -16,7 +15,7 @@ export const Bar: React.FC<IBar> = ({
 
   return (
     <BarChartSettingsContext.Consumer>
-      {({ yAxisUnitPixels, maxYValue }) => {
+      {({ yAxisUnitPixels, maxYValue, yAxisHeight }) => {
         return (
           <StyledBar
             ref={barRef}
@@ -26,7 +25,7 @@ export const Bar: React.FC<IBar> = ({
           >
             <VerticalResizeButton
               barRef={barRef}
-              maxYValue={maxYValue}
+              yAxisHeight={yAxisHeight}
               yAxisUnitPixels={yAxisUnitPixels}
               onYValueChange={onYValueChange}
             ></VerticalResizeButton>

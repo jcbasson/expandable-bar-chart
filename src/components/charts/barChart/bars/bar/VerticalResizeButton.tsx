@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { useVerticalResizeHandler } from "./hooks";
 import { IVerticalResizeButton } from "./types";
@@ -7,14 +7,15 @@ export const VerticalResizeButton: React.FC<IVerticalResizeButton> = ({
   barRef,
   yAxisUnitPixels,
   onYValueChange,
-  maxYValue
+  yAxisHeight
 }) => {
   const [resizeButtonRef] = useVerticalResizeHandler({
     barRef,
-    maxYValue,
+    yAxisHeight,
     yAxisUnitPixels,
     onYValueChange
   });
+
   return (
     <VerticalResizeButtonContainer>
       <ResizeButton ref={resizeButtonRef}></ResizeButton>

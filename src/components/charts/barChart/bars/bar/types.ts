@@ -10,7 +10,7 @@ export interface IBar {
 export interface IVerticalResizeButton {
   readonly barRef: React.MutableRefObject<HTMLDivElement>;
   readonly yAxisUnitPixels: number;
-  readonly maxYValue: number;
+  readonly yAxisHeight: number;
   readonly onYValueChange: Function;
 }
 
@@ -22,8 +22,7 @@ export type CalculateBarHeight = (
 
 export type RestrictBarYPixels = (
   minYValue: number,
-  maxYValue: number,
-  yAxisUnitPixels: number
+  maxYValue: number
 ) => (barYValue: number) => number;
 
 export type AdjustBarYValueToNearestYAxisUnit = (
@@ -31,42 +30,39 @@ export type AdjustBarYValueToNearestYAxisUnit = (
 ) => (barYValue: number) => number;
 
 export type MakeBarHeight = (
-  maxYValue: number,
+  yAxisHeight: number,
   yAxisUnitPixels: number
 ) => Function;
 
 export type CalculateBarTrackerYCoordinate = (
   barYValue: number,
-  maxYValue: number,
-  yAxisUnitPixels: number
+  yAxisHeight: number
 ) => number;
 
-export interface ISetBarParams {
-  readonly maxYValue: number;
+export interface ISetBarHeightParams {
+  readonly yAxisHeight: number;
   readonly originalBarHeight: number;
   readonly previousMouseYCoordinate: number;
   readonly newMouseYCoordinate: number;
   readonly barElement: HTMLElement;
-  readonly barTrackerLineElement: HTMLElement;
-  readonly barTrackerValueElement: HTMLElement;
   readonly yAxisUnitPixels: number;
 }
-export type SetBar = (params: ISetBarParams) => void;
+export type SetBarHeight = (params: ISetBarHeightParams) => void;
 
-export type SetBarTracker = (
-  barHeight: number,
-  maxYValue: number,
-  yAxisUnitPixels: number
-) => (
-  trackerLineElement: HTMLElement,
-  trackerValueElement: HTMLElement
-) => void;
+export interface ISetBarTrackerParams {
+  readonly barElement: HTMLElement;
+  readonly yAxisHeight: number;
+  readonly yAxisUnitPixels: number;
+  readonly barTrackerLineElement: HTMLElement;
+  readonly barTrackerValueElement: HTMLElement;
+}
+export type SetBarTracker = (params: ISetBarTrackerParams) => void;
 
 export type RestrictBarYValue = (maxYValue: number, yValue: number) => number;
 
 export interface UseVerticalResizeHandlerParams {
   barRef: React.MutableRefObject<HTMLDivElement>;
-  maxYValue: number;
+  yAxisHeight: number;
   yAxisUnitPixels: number;
   onYValueChange: Function;
 }

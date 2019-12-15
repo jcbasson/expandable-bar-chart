@@ -1,12 +1,17 @@
 import { useEffect, useRef } from "react";
 import _ from "lodash";
-import { setBar, getBarHeight, calculateCurrentYValue } from "./utils";
+import {
+  setBarHeight,
+  setBarTracker,
+  getBarHeight,
+  calculateCurrentYValue
+} from "./utils";
 import { UseVerticalResizeHandler } from "./types";
 import { hideElements } from "../../../../../utils/dom/domUtils";
 
 export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
   barRef,
-  maxYValue,
+  yAxisHeight,
   yAxisUnitPixels,
   onYValueChange
 }) => {
@@ -15,8 +20,10 @@ export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
   useEffect(() => {
     const resizeButtonElement = _.get(resizeButtonRef, "current");
     //@ts-ignore
-    const barElement = barRef.current;
-    //Accessing the DOM directly because I did not want to prop drill a ref for this
+    const barElement = barRef.current as HTMLElement;
+    /*Accessing the DOM directly because I did not want to prop drill a ref for this
+      And the react context does not allow me use this hook in it's callback
+    */
     const barTrackerLineElement = document.querySelector(
       ".bar-tracker-line"
     ) as HTMLElement;
@@ -25,26 +32,37 @@ export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
     ) as HTMLElement;
     let previousMouseYCoordinate = 0;
     let originalBarHeight = 0;
+    let mouseMoveCallbackTimeoutID = 0;
 
     const mouseMoveHandler = (event: MouseEvent): void => {
-      setBar({
-        maxYValue,
-        originalBarHeight,
-        previousMouseYCoordinate,
-        newMouseYCoordinate: event.pageY,
-        barElement,
-        barTrackerLineElement,
-        barTrackerValueElement,
-        yAxisUnitPixels
-      });
+      clearTimeout(mouseMoveCallbackTimeoutID);
+      mouseMoveCallbackTimeoutID = setTimeout(() => {
+        setBarHeight({
+          yAxisHeight,
+          originalBarHeight,
+          previousMouseYCoordinate,
+          newMouseYCoordinate: event.pageY,
+          barElement,
+          yAxisUnitPixels
+        });
+
+        setBarTracker({
+          barElement,
+          yAxisHeight,
+          yAxisUnitPixels,
+          barTrackerLineElement,
+          barTrackerValueElement
+        });
+      }, 0);
     };
 
     const mouseUpHandler = (): void => {
+      onYValueChange(
+        calculateCurrentYValue(getBarHeight(barElement), yAxisUnitPixels)
+      );
       hideElements([barTrackerLineElement, barTrackerValueElement]);
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
-      const barHeight = getBarHeight(barElement);
-      onYValueChange(calculateCurrentYValue(barHeight, yAxisUnitPixels));
     };
 
     const mouseDownHandler = (event: MouseEvent): void => {
@@ -55,22 +73,15 @@ export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
       window.addEventListener("mouseup", mouseUpHandler);
     };
 
-    if (resizeButtonElement) {
-      //TODO: Look into a typescript strict null/undefined check set false not working as should
-      // @ts-ignore
-      resizeButtonElement.addEventListener("mousedown", mouseDownHandler);
-    }
+    // @ts-ignore
+    resizeButtonElement.addEventListener("mousedown", mouseDownHandler);
     return () => {
-      if (resizeButtonElement) {
-        ///TODO: Look into a typescript strict null/undefined check set false not working as should
-        // @ts-ignore
-        resizeButtonElement.removeEventListener("mousedown", mouseDownHandler);
-      }
-
+      // @ts-ignore
+      resizeButtonElement.removeEventListener("mousedown", mouseDownHandler);
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };
-  }, [maxYValue, yAxisUnitPixels]);
+  }, [barRef.current, yAxisHeight, yAxisUnitPixels]);
 
   return [resizeButtonRef];
 };
