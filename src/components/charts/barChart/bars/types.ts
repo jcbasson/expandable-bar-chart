@@ -8,4 +8,6 @@ export interface IBarData {
 export interface IBars {
   readonly bars: IBarData[];
   readonly yAxisHeight: number;
+  readonly yAxisUnitPixels: number;
+  readonly isReadOnly: boolean;
 }

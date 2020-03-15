@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { makeGetGlobalWarmingBarData } from "./utils";
 import { IState } from "../../types";
 import { IBarData } from "../charts/barChart/bars/types";
-import { BarChart } from "../charts/barChart";
+import BarChart from "../charts/barChart";
 
 //Sample component to show how the bar chart might be utilized
 export const GlobalWarmingChart = () => {

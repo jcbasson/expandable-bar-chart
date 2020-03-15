@@ -4,18 +4,15 @@ import {
   restrictNumberToRange,
   roundNumberToNearestMultiple
 } from "../../../../../utils/numbers/numberUtils";
-import { setElementsDisplay } from "../../../../../utils/dom/domUtils";
 import {
   CalculateBarHeight,
   RestrictBarYPixels,
   AdjustBarYValueToNearestYAxisUnit,
   MakeBarHeight,
-  CalculateBarTrackerYCoordinate,
   SetBarHeight,
   RestrictBarYValue,
   GetBarHeight,
-  CalculateCurrentYValue,
-  SetBarTracker
+  CalculateCurrentYValue
 } from "./types";
 
 const calculateBarHeight: CalculateBarHeight = (
@@ -34,19 +31,15 @@ const adjustBarYValueToNearestYAxisUnit: AdjustBarYValueToNearestYAxisUnit = yAx
   return _.partialRight(roundNumberToNearestMultiple, yAxisUnitPixels);
 };
 
-export const makeBarHeight: MakeBarHeight = (yAxisHeight, yAxisUnitPixels) => {
+export const makeCalculateBarHeight: MakeBarHeight = (
+  yAxisHeight,
+  yAxisUnitPixels
+) => {
   return fp.pipe(
     calculateBarHeight,
     restrictBarYPixels(0, yAxisHeight),
     adjustBarYValueToNearestYAxisUnit(yAxisUnitPixels)
   );
-};
-
-const calculateBarTrackerYCoordinate: CalculateBarTrackerYCoordinate = (
-  barHeight,
-  yAxisHeight
-) => {
-  return yAxisHeight - barHeight;
 };
 
 export const setBarHeight: SetBarHeight = ({
@@ -57,7 +50,10 @@ export const setBarHeight: SetBarHeight = ({
   barElement,
   yAxisUnitPixels
 }) => {
-  const generateBarHeight = makeBarHeight(yAxisHeight, yAxisUnitPixels);
+  const generateBarHeight = makeCalculateBarHeight(
+    yAxisHeight,
+    yAxisUnitPixels
+  );
   //TODO: Possibly memoize here if performance becomes issue
   const barHeight = generateBarHeight(
     originalBarHeight,
@@ -66,29 +62,6 @@ export const setBarHeight: SetBarHeight = ({
   );
   barElement.style.border = `${barHeight <= 0 ? "none" : "1px solid #000"}`;
   barElement.style.height = `${barHeight}px`;
-};
-
-export const setBarTracker: SetBarTracker = ({
-  barElement,
-  yAxisHeight,
-  yAxisUnitPixels,
-  barTrackerLineElement,
-  barTrackerValueElement
-}) => {
-  const barHeight = getBarHeight(barElement);
-  const barTrackerCoordinate = calculateBarTrackerYCoordinate(
-    barHeight,
-    yAxisHeight
-  );
-  const barTrackerValue = calculateCurrentYValue(barHeight, yAxisUnitPixels);
-  barTrackerLineElement.style.top = `${barTrackerCoordinate}px`;
-  barTrackerValueElement.style.top = `${barTrackerCoordinate - 5}px`;
-  barTrackerValueElement.innerHTML = `${barTrackerValue}`;
-
-  setElementsDisplay(
-    [barTrackerLineElement, barTrackerValueElement],
-    "inline-block"
-  );
 };
 
 export const restrictBarYValue: RestrictBarYValue = (maxYValue, yValue) => {

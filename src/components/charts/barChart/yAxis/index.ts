@@ -1,3 +1,3 @@
-import { YAxis } from "./Yaxis";
+import YAxis from "./YAxis";
 
-export { YAxis };
+export default YAxis;

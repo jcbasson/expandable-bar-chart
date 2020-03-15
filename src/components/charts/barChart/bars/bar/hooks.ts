@@ -1,11 +1,7 @@
 import { useEffect, useRef } from "react";
-import _ from "lodash";
-import {
-  setBarHeight,
-  setBarTracker,
-  getBarHeight,
-  calculateCurrentYValue
-} from "./utils";
+import get from "lodash/get";
+import debounce from "lodash/debounce";
+import { setBarHeight, getBarHeight, calculateCurrentYValue } from "./utils";
 import { UseVerticalResizeHandler } from "./types";
 import { hideElements } from "../../../../../utils/dom/domUtils";
 
@@ -18,51 +14,30 @@ export const useVerticalResizeHandler: UseVerticalResizeHandler = ({
   const resizeButtonRef = useRef();
 
   useEffect(() => {
-    const resizeButtonElement = _.get(
-      resizeButtonRef,
-      "current"
-    ) as HTMLElement;
-    const barElement = _.get(barRef, "current") as HTMLElement;
-    /*Accessing the DOM directly because I did not want to prop drill a ref for this
-      And the react context does not allow me use this hook in it's callback
-    */
-    const barTrackerLineElement = barElement.parentElement.querySelector(
-      ".bar-tracker-line"
-    ) as HTMLElement;
-    const barTrackerValueElement = barElement.parentElement.querySelector(
-      ".bar-tracker-value"
-    ) as HTMLElement;
+    const resizeButtonElement = get(resizeButtonRef, "current") as HTMLElement;
+    const barElement = get(barRef, "current") as HTMLElement;
     let previousMouseYCoordinate = 0;
     let originalBarHeight = 0;
-    let mouseMoveCallbackTimeoutID = 0;
+
+    const updateBarChart = debounce((event: MouseEvent) => {
+      setBarHeight({
+        yAxisHeight,
+        originalBarHeight,
+        previousMouseYCoordinate,
+        newMouseYCoordinate: event.pageY,
+        barElement,
+        yAxisUnitPixels
+      });
+    }, 0);
 
     const mouseMoveHandler = (event: MouseEvent): void => {
-      clearTimeout(mouseMoveCallbackTimeoutID);
-      mouseMoveCallbackTimeoutID = setTimeout(() => {
-        setBarHeight({
-          yAxisHeight,
-          originalBarHeight,
-          previousMouseYCoordinate,
-          newMouseYCoordinate: event.pageY,
-          barElement,
-          yAxisUnitPixels
-        });
-
-        setBarTracker({
-          barElement,
-          yAxisHeight,
-          yAxisUnitPixels,
-          barTrackerLineElement,
-          barTrackerValueElement
-        });
-      }, 0);
+      updateBarChart(event);
     };
 
     const mouseUpHandler = (): void => {
       onYValueChange(
         calculateCurrentYValue(getBarHeight(barElement), yAxisUnitPixels)
       );
-      hideElements([barTrackerLineElement, barTrackerValueElement]);
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };

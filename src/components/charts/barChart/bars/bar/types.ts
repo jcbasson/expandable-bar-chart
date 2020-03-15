@@ -2,9 +2,12 @@ import React from "react";
 
 export interface IBar {
   readonly barName: string;
-  readonly yValue: number;
+  readonly yAxisHeight: number;
+  readonly yAxisUnitPixels: number;
   readonly color: string;
   readonly onYValueChange: Function;
+  readonly isReadOnly: boolean;
+  readonly yValue: number;
 }
 
 export interface IVerticalResizeButton {
